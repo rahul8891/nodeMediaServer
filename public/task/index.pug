@@ -1,0 +1,47 @@
+<html lang="en">
+    <head>
+        <meta charset="utf-8"><link rel="shortcut icon" href="/favicon.ico">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <meta name="theme-color" content="#000000">
+        <link rel="manifest" href="/manifest.json">
+        <title>Node-Media-Server Admin</title>
+        <link href="/static/css/2.ceb657f8.chunk.css" rel="stylesheet">
+        <link href="/static/css/main.a08da4e0.chunk.css" rel="stylesheet">
+    </head>
+    <body>
+        <div id="root"><section class="ant-layout ant-layout-has-sider" style="min-height: 100vh;">
+           
+                <div class="ant-layout-sider-children">
+                    <div class="logo">
+                        <h1>NodeMediaServer</h1>
+                    </div>
+                    <div class="body">
+                        form(action="/tasks" method="POST" name="form1" enctype="application/json")
+                            label Stream:
+                            input(type="text" name="stream" placeholder="Enter Stream Path")
+                            
+                            input(type="submit")
+                    </div>
+
+                    <div>
+                        <table style="width:100%;" border="1px solid black">
+                            <tr>
+                                <th>Id</th>
+                                <th>Stream</th>
+                                <th>Action</th>
+                            </tr>
+                            tbody
+                                each stream in streams
+                                    tr
+                                        td #{stream.id}
+                                        td #{stream.stream}
+                                        td #{stream.id}
+                            
+                        </table>
+                    </div>
+
+                </div>
+            
+        </div>                                    
+    </body>
+</html>
