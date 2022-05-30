@@ -87,7 +87,19 @@ exports.config = {
       ]
   },
   relay: {
-      ffmpeg: '/usr/bin/ffmpeg',
-      tasks: []
+    ffmpeg: '/usr/bin/ffmpeg',    
+    tasks: [
+      {
+        app: '0D2VCtcCFp',
+        mode: 'static',
+        vc: 'libx264',
+        hls: true,
+        hlsFlags: '[hls_time=2:hls_list_size=3:hls_flags=delete_segments]',
+        dash: true,
+        dashFlags: 'dashFlags',
+        name: '189',
+        edge: 'http://bestbuyiptv.tv:8080/live:zhang_1032/0D2VCtcCFp/189',
+      }
+    ]
   }
 };

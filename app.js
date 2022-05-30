@@ -4,12 +4,12 @@ const bodyParser = require('body-parser');
 const http = require('http');
 
 let {config} = require('./config');
-var Stream = require('./models/stream.model');
+// var Stream = require('./models/stream.model');
 var cron = require('node-cron');
 
 let app = express();
 
-function getStreamsData() { 
+/*function getStreamsData() { 
   let {config} = require('./config');
 
   let date_ob = new Date(); 
@@ -46,7 +46,7 @@ function getStreamsData() {
   });
         
   nms.run();
-}
+}*/
 
 /*function destroyStreamsData() { 
   
@@ -61,7 +61,8 @@ cron.schedule('5 * * * *', () => {
 
 console.log('aaaa11111');
 let nms = new NodeMediaServer(config);
-getStreamsData();
+// getStreamsData();
+nms.run();
 nms.on('preConnect', (id, args) => {
   console.log('[NodeEvent on preConnect]', `id=${id} args=${JSON.stringify(args)}`);
   // let session = nms.getSession(id);
@@ -84,7 +85,7 @@ nms.on('prePublish', (id, StreamPath, args) => {
 
 nms.on('postPublish', (id, StreamPath, args) => {
   console.log('[NodeEvent on postPublish]', `id=${id} StreamPath=${StreamPath} args=${JSON.stringify(args)}`);
-  postStream(id, StreamPath);
+  // postStream(id, StreamPath);
 });
 
 nms.on('donePublish', (id, StreamPath, args) => {
@@ -105,7 +106,7 @@ nms.on('donePlay', (id, StreamPath, args) => {
   console.log('[NodeEvent on donePlay]', `id=${id} StreamPath=${StreamPath} args=${JSON.stringify(args)}`);
 });
 
-function postStream(streamID, streamPath) { console.log('Data updating');
+/* function postStream(streamID, streamPath) { console.log('Data updating');
   var streamName = streamPath.replace('/live/', '');
   var rtmpPath = 'rtmp://nmsdev.msgnaa.info:1935'+streamPath;
 
@@ -118,4 +119,4 @@ function postStream(streamID, streamPath) { console.log('Data updating');
         console.log('streamID = ', res);
       });
   // });
-}
+} */
