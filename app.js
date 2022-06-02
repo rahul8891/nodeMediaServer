@@ -2,7 +2,6 @@ const express = require("express");
 const NodeMediaServer = require('./node_media_server');
 const bodyParser = require('body-parser');
 const http = require('http');
-const request = require("request");
 
 let {config} = require('./config');
 // var Stream = require('./models/stream.model');
@@ -16,50 +15,8 @@ const fetch = require('node-fetch');
 
 const URL = 'http://vc.msgnaa.info/api/';
 
-async function getPosts() { console.log("asasdasd");
-  /*const response = await fetch(
-    `http://vc.msgnaa.info/api/live/iptv/listAll`
-  );
-
-  if (!response.ok) {
-    throw new Error(response.statusText);
-  } else {
-    console.log("Data = ", response);
-  }
-
-  return await response.json();*/
-
-  /*request({
-    uri: 'http://vc.msgnaa.info/api/live/iptv/listAll',
-    headers: {
-      authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZW1haWwiOiJhZG1pbkBtc2duYWEuaW5mbyIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY1MTE2OTQ1M30.zPnEXZWA253KYuynVQKZp6aqOsC3UOtr7DD4Au1ScTg',
-    },
-    method: 'post',
-    function(error, response, body) {
-      if (!error) {
-        console.log(body);
-        res.json(body);
-      } else {
-        res.json(error);
-      }
-    }*/
-
-  /*const options = {
-    method: 'POST',
-    uri: 'http://vc.msgnaa.info/api/live/iptv/listAll',
-    headers: {
-      authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZW1haWwiOiJhZG1pbkBtc2duYWEuaW5mbyIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY1MTE2OTQ1M30.zPnEXZWA253KYuynVQKZp6aqOsC3UOtr7DD4Au1ScTg',
-      'Content-Type': 'application/json' 
-    },
-    json: true,
-    // JSON stringifies the body automatically
-  };
-​
-  request(options, function (error, response, body) {
-    if (error) throw new Error(error);
-  
-        console.log(body); //get your response here
-  });*/
+async function getPosts() {
+  const request = require("request");
 
   request.post( 
     { uri: 'http://vc.msgnaa.info/api/live/iptv/listAll',
@@ -79,12 +36,13 @@ async function getPosts() { console.log("asasdasd");
     }
   );
 }
+
 getPosts();
 
 
 function getStreamsData(streams) { 
   let {config} = require('./config');
-
+  console.log("streamData = ", streams);
   let date_ob = new Date(); 
   // current hours and minute
   let hours = date_ob.getHours();
@@ -170,30 +128,32 @@ nms.on('donePlay', (id, StreamPath, args) => {
 });
 
 function postStream(streamID, streamPath) {
+  const request = require("request");
+
   var streamName = streamPath.replace('/live/', '');
   console.log("Name = ", streamName);
   var path = 'http://104.149.131.242:8000/live/'+streamName+'/index.m3u8';
 
-  request.post( 
-    { uri: 'http://vc.msgnaa.info/api/live/iptv/addPath',
-     json: true,
-      headers: {
-        'Content-Type' : 'application/x-www-form-urlencoded',
-        authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZW1haWwiOiJhZG1pbkBtc2duYWEuaW5mbyIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY1MTE2OTQ1M30.zPnEXZWA253KYuynVQKZp6aqOsC3UOtr7DD4Au1ScTg',
-      },
-      body: {
-        path: path,
-        stream_id: streamID,
-        name: streamName,
-      }
+  const options = { uri: 'http://vc.msgnaa.info/api/live/iptv/addPath',
+    json: true,
+    headers: {
+      'Content-Type' : 'application/json',
+      authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZW1haWwiOiJhZG1pbkBtc2duYWEuaW5mbyIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY1MTE2OTQ1M30.zPnEXZWA253KYuynVQKZp6aqOsC3UOtr7DD4Au1ScTg',
     },
-    function (error, res, object) {
+    body: {
+      path: path,
+      stream_id: streamID,
+      name: streamName,
+    }
+  };
+
+  console.log("Data = ", options);
+  request.post(options, function (error, res, object) {
       if (!error) { 
-        getStreamsData(object.data);
+        console.log("Data = ", object);
       } else {
         console.log("Error = ", error);
       } 
-
     }
   );
 }
