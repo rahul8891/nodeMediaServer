@@ -88,6 +88,10 @@ exports.config = {
   },
   relay: {
     ffmpeg: '/usr/bin/ffmpeg',    
+    tasks: []
+  }
+  /*relay: {
+    ffmpeg: '/usr/bin/ffmpeg',    
     tasks: [
       {
         app: 'live',
@@ -101,5 +105,5 @@ exports.config = {
         edge: 'http://bestbuyiptv.tv:8080/live:zhang_1032/0D2VCtcCFp/6978',
       }
     ]
-  }
+  }*/
 };
