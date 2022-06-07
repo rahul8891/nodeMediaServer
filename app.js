@@ -37,9 +37,6 @@ async function getPosts() {
   );
 }
 
-getPosts();
-
-
 function getStreamsData(streams) { 
   let {config} = require('./config');
   console.log("streamData = ", streams);
@@ -74,16 +71,23 @@ function getStreamsData(streams) {
   nms.run();
 }
 
-/*function destroyStreamsData() { 
-  
-  nms.stop();
+function delStream(req, res, next) {
+  let publishStreamPath = `/${req.params.app}/${req.params.stream}`;
+  let publisherSession = this.sessions.get(
+    this.publishers.get(publishStreamPath)
+  );
 
-  getStreamsData();
+  if (publisherSession) {
+    publisherSession.stop();
+    res.json("ok");
+  } else {
+    res.json({ error: "stream not found" }, 404);
+  }
 }
 
-cron.schedule('5 * * * *', () => {
-  destroyStreamsData();
-});*/
+cron.schedule('* * * * *', () => {
+  getPosts();
+});
 
 let nms = new NodeMediaServer(config);
 
@@ -101,13 +105,10 @@ nms.on('doneConnect', (id, args) => {
 
 nms.on('prePublish', (id, StreamPath, args) => {
   console.log('[NodeEvent on prePublish]', `id=${id} StreamPath=${StreamPath} args=${JSON.stringify(args)}`);
-  // let session = nms.getSession(id);
-  // session.reject();
 });
 
 nms.on('postPublish', (id, StreamPath, args) => {
   console.log('[NodeEvent on postPublish]', `id=${id} StreamPath=${StreamPath} args=${JSON.stringify(args)}`);
-  // postStream(id, StreamPath);
 });
 
 nms.on('donePublish', (id, StreamPath, args) => {
@@ -144,10 +145,10 @@ function postStream(streamID, streamPath) {
       path: path,
       stream_id: streamID,
       name: streamName,
+      status: 'start',
     }
   };
 
-  console.log("Data = ", options);
   request.post(options, function (error, res, object) {
       if (!error) { 
         console.log("Data = ", object);
